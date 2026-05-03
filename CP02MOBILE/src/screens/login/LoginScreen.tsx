@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {View, TextInput, Pressable, Text} from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../types/nativeStackRoutes";
+import { RootStackParamList } from "../../types/navigation";
 
 type Props = {
     navigation: NativeStackNavigationProp<RootStackParamList, "Login">;
@@ -21,7 +21,10 @@ export default function LoginScreen({navigation} : Props){
         if(user){
             console.log("OK", user.name)
             setMensagemDeLogin(`Login realizado, seja bem vindo ${username}`)
-            navigation.navigate("Home", {userName: `${username}`})
+            navigation.navigate("TabRoutes", {
+                screen: "Home",
+                params: {userName: username},
+            });
         } else {
             setMensagemDeLogin(`Credenciais inválidas`)
         }

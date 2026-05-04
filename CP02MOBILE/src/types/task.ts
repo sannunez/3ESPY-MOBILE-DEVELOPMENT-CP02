@@ -1,5 +1,5 @@
-export type TaskStatus = 'pendente' | 'em_andamento' | 'concluida';
-export type TaskPriority = 'baixa' | 'media' | 'alta';
+export type TaskStatus = "pendente" | "em_andamento" | "concluida";
+export type TaskPriority = "baixa" | "media" | "alta";
 
 export interface Task {
   id: string;

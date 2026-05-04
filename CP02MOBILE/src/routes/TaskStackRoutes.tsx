@@ -10,9 +10,9 @@ const Stack = createNativeStackNavigator<TaskStackParamList>();
 export default function TaskStackRoutes() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="TaskList" component={TaskListScreen} options={{headerShown: false}} />
-      <Stack.Screen name="TaskForm" component={TaskListFormScreen} />
-      <Stack.Screen name="TaskDetail" component={TaskDetailScreen} />
+        <Stack.Screen name="TaskList" component={TaskListScreen} options={{headerShown: false}} />
+        <Stack.Screen name="TaskForm" component={TaskListFormScreen}/>
+        <Stack.Screen name="TaskDetail" component={TaskDetailScreen}/>
     </Stack.Navigator>
   );
 }

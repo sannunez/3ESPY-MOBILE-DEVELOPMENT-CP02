@@ -1,41 +1,69 @@
-import { View, Text, Pressable} from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
-import {Picker} from "@react-native-picker/picker"
+import { Picker } from "@react-native-picker/picker";
 
-export default function SettingsScreen(){
-    const {user, salutation, setSalutation} = useAuth();
+import Header from "../../components/Header";
+import CustomButton from "../../components/CustomButton";
 
-    const {currentTheme, toggleTheme} = useTheme();
-    
-    
-    return(
-        <View style={{backgroundColor: currentTheme.background}}>
-            <Text style={{color: currentTheme.text}}>Settings Screen</Text>
+export default function SettingsScreen() {
+  const { user, salutation, setSalutation } = useAuth();
+  const { currentTheme, toggleTheme } = useTheme();
 
-            <Pressable onPress={toggleTheme}>
-                <Text style={{color: currentTheme.text}}>Mudar tema</Text>
-            </Pressable>
+  return (
+    <View
+        style={[
+            styles.container,
+            { backgroundColor: currentTheme.background },
+        ]}
+    >
+        <Header />
 
-            <View>
-                <Text>Perfil de Usuário: </Text>
-                <Text style={{color: currentTheme.text}}>{user?.role}</Text>
-                <Text style={{color: currentTheme.text}}>{user?.name}</Text>
-            </View>
+        <CustomButton title="Mudar tema" onPress={toggleTheme} />
 
-            <View>
-                <Text>Preferência de tratamento:</Text>
-                <Picker
-                    selectedValue={salutation}
-                    onValueChange={(itemValue) => setSalutation(itemValue)}>
-                    
-                    <Picker.Item label="Sr." value="Sr."/>
-                    <Picker.Item label="Sra." value="Sra."/>
-                    <Picker.Item label="Srta." value="Srta."/>
-                </Picker>
-            </View>
+        <View style={styles.section}>
+            <Text style={[styles.label, { color: currentTheme.text }]}>
+            Perfil:
+            </Text>
+
+            <Text style={{ color: currentTheme.text }}>
+            Cargo: {user?.role}
+            </Text>
+
+            <Text style={{ color: currentTheme.text }}>
+            Nome: {user?.name}
+            </Text>
         </View>
 
-        
-    )
+        <View style={styles.section}>
+            <Text style={[styles.label, { color: currentTheme.text }]}>
+            Tratamento:
+            </Text>
+
+            <Picker
+            selectedValue={salutation}
+            onValueChange={(value) => setSalutation(value)}
+            style={{ color: currentTheme.text }}
+            >
+            <Picker.Item label="Sr." value="Sr." />
+            <Picker.Item label="Sra." value="Sra." />
+            <Picker.Item label="Srta." value="Srta." />
+            </Picker>
+        </View>
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  section: {
+    marginBottom: 20,
+  },
+  label: {
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+});

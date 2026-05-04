@@ -1,21 +1,35 @@
 import { useState } from "react";
-import { View, TextInput, Pressable, Text } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
 import { useTasks } from "../../hooks/useTasks";
 import { generateId } from "../../utils/generateId";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { TaskStackParamList } from "../../types/navigation";
+import { Task } from "../../types/task";
+
+import Header from "../../components/Header";
+import CustomInput from "../../components/CustomInput";
+import CustomButton from "../../components/CustomButton";
+
+import { useTheme } from "../../context/ThemeContext";
 
 type Props = NativeStackScreenProps<TaskStackParamList, "TaskForm">;
 
 export default function TaskFormScreen({ route, navigation }: Props) {
-  const { addTask, updateTask, tasks } = useTasks();
+  const { tasks, addTask, updateTask } = useTasks();
+  const { currentTheme } = useTheme();
 
   const taskId = route.params?.taskId;
   const editingTask = tasks.find((t) => t.id === taskId);
 
-  const [title, setTitle] = useState(editingTask?.title || "");
-  const [description, setDescription] = useState(
-    editingTask?.description || ""
+  const [title, setTitle] = useState(editingTask?.title ?? "");
+  const [description, setDescription] = useState(editingTask?.description ?? "");
+  const [status, setStatus] = useState<Task["status"]>(
+    editingTask?.status ?? "pendente"
+  );
+  const [priority, setPriority] = useState<Task["priority"]>(
+    editingTask?.priority ?? "media"
   );
 
   const handleSave = () => {
@@ -26,6 +40,8 @@ export default function TaskFormScreen({ route, navigation }: Props) {
         ...editingTask,
         title,
         description,
+        status,
+        priority, // 👈 novo campo
         updatedAt: new Date().toISOString(),
       });
     } else {
@@ -33,8 +49,8 @@ export default function TaskFormScreen({ route, navigation }: Props) {
         id: generateId(),
         title,
         description,
-        status: "pendente",
-        priority: "media",
+        status,
+        priority, // 👈 novo campo
         category: "geral",
         categoryIcon: "",
         createdAt: new Date().toISOString(),
@@ -46,24 +62,68 @@ export default function TaskFormScreen({ route, navigation }: Props) {
   };
 
   return (
-    <View style={{ padding: 16 }}>
-        <TextInput
+    <View
+        style={[
+            styles.container,
+            { backgroundColor: currentTheme.background },
+        ]}
+    >
+        <Header />
+
+        <CustomInput
             placeholder="Título"
             value={title}
             onChangeText={setTitle}
-            style={{ borderWidth: 1, marginBottom: 10, padding: 8 }}
         />
 
-        <TextInput
+        <CustomInput
             placeholder="Descrição"
             value={description}
             onChangeText={setDescription}
-            style={{ borderWidth: 1, marginBottom: 10, padding: 8 }}
         />
 
-        <Pressable onPress={handleSave}>
-            <Text>Salvar</Text>
-        </Pressable>
-    </View>
+        <Text style={[styles.label, { color: currentTheme.text }]}>
+            Status
+        </Text>
+
+        <Picker
+            selectedValue={status}
+            onValueChange={(v) => setStatus(v)}
+            style={{ color: currentTheme.text }}
+        >
+            <Picker.Item label="Pendente" value="pendente" />
+            <Picker.Item label="Em andamento" value="em_andamento" />
+            <Picker.Item label="Concluída" value="concluida" />
+        </Picker>
+
+        <Text style={[styles.label, { color: currentTheme.text }]}>
+            Prioridade
+        </Text>
+
+       <Picker
+            selectedValue={priority}
+            onValueChange={(v) => setPriority(v)}
+            style={{ color: currentTheme.text }}
+        >
+            <Picker.Item label="Baixa" value="baixa" />
+            <Picker.Item label="Média" value="media" />
+            <Picker.Item label="Alta" value="alta" />
+        </Picker>
+
+        <CustomButton title="Salvar tarefa" onPress={handleSave} />
+        </View>
   );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+        gap: 12,
+    },
+    label: {
+        marginTop: 10,
+        marginBottom: 4,
+        fontWeight: "600",
+    },
+});

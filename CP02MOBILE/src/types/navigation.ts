@@ -6,7 +6,13 @@ export type RootStackParamList = {
 }
 
 export type TabParamList = {
-    Home: {userName: string};
+    Home: undefined;
     Settings: undefined;
     Tasks: undefined;
 }
+
+export type TaskStackParamList = {
+  TaskList: undefined;
+  TaskForm: { taskId?: string } | undefined;
+  TaskDetail: { taskId: string };
+};

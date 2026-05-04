@@ -1,22 +1,18 @@
 import {View, Text} from "react-native"
 import { RouteProp } from "@react-navigation/native"
 import { TabParamList } from "../../types/navigation"
-import { useTheme } from "../../theme/ThemeContext"
+import { useTheme } from "../../context/ThemeContext"
+import { useAuth } from "../../context/AuthContext";
 
 
-type Props = {
-    route: RouteProp<TabParamList, "Home">
-}
 
-export default function HomeScreen({route} : Props){
-    const {userName} = route.params;
-
+export default function HomeScreen(){
     const {currentTheme} = useTheme();
+    const {user, salutation} = useAuth();
 
     return(
         <View style={{backgroundColor: currentTheme.background}}>
-            <Text style={{color: currentTheme.text}}>HomeScreen</Text>
-            <Text style={{color: currentTheme.text}}>{userName}</Text>
+            <Text style={{color: currentTheme.text}}>{salutation}{user?.name}</Text>
         </View>
     )    
 }

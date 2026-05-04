@@ -1,51 +1,23 @@
 import { useState } from "react";
 import {View, TextInput, Pressable, Text} from "react-native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../types/navigation";
+import { useAuth } from "../../context/AuthContext";
 
-type Props = {
-    navigation: NativeStackNavigationProp<RootStackParamList, "Login">;
-};
+export default function LoginScreen(){
+    const {login, user} = useAuth();
 
-export default function LoginScreen({navigation} : Props){
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("")
-
-    const [mensagemDeLogin, setMensagemDeLogin] = useState("")
-
+    const[username, setUsername] = useState("");
+    const[password, setPassword] = useState("");
+    const[mensagem, setMensagem] = useState("");
+    
     const handleLogin = () => {
-        const user = users.find(
-            (u) => u.username === username && u.password === password
-        );
-
-        if(user){
-            console.log("OK", user.name)
-            setMensagemDeLogin(`Login realizado, seja bem vindo ${username}`)
-            navigation.navigate("TabRoutes", {
-                screen: "Home",
-                params: {userName: username},
-            });
+        const success = login(username, password);
+    
+        if(!success) {
+            setMensagem("Credenciais inválidas")
         } else {
-            setMensagemDeLogin(`Credenciais inválidas`)
+            setMensagem("")
         }
     }
-
-    const users = [
-        {
-            id: 1,
-            username: 'admin',
-            password: '123',
-            role: 'admin',
-            name: 'Administrador',
-        },
-        {
-            id: 2,
-            username: 'user',
-            password: '123',
-            role: 'user',
-            name: 'Usuário Comum',
-        },
-    ];
 
     return(
         <View>
@@ -64,7 +36,7 @@ export default function LoginScreen({navigation} : Props){
                 <Text>Log in</Text>
             </Pressable>
 
-            <Text>{mensagemDeLogin}</Text>
+            <Text>{mensagem}</Text>
         </View>
     )
 }

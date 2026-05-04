@@ -17,7 +17,7 @@ export default function HomeScreen() {
   const fetchMotivationalQuote = async () => {
     try {
       setLoading(true);
-      const response = await fetch("https://api.quotable.io/random");
+      const response = await fetch("http://api.quotable.io/random");
       const data = await response.json();
       setQuote(data.content);
     } catch (error) {
@@ -38,9 +38,10 @@ export default function HomeScreen() {
         <Header />
 
         <Text style={[styles.text, { color: currentTheme.text }]}>
-            {salutation} {user?.name}
+            Seja bem vindo(a), {salutation} {user?.name}!
         </Text>
 
+        <Text style={[styles.quote, { color: currentTheme.text }]}>Frase do dia: </Text>
         <Text style={[styles.quote, { color: currentTheme.text }]}>
             {loading ? "Loading..." : quote}
         </Text>

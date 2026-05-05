@@ -27,6 +27,8 @@ export function TaskProvider({children} : {children: React.ReactNode}){
 
             setLoading(false);
         }
+        
+        loadTasks();
     }, []);
 
     //Salva/Persiste Tasks

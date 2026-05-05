@@ -9,7 +9,7 @@ export default function HomeScreen() {
   const { user, salutation } = useAuth();
 
   const [quote, setQuote] = useState("");
-  const [author, setAuthor] = useState(""); // NOVO
+  const [author, setAuthor] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function HomeScreen() {
       const data = await response.json();
 
       setQuote(data.content);
-      setAuthor(data.author); // NOVO
+      setAuthor(data.author);
     } catch (error) {
       console.error("Error fetching quote:", error);
       setQuote("Stay motivated and keep going!");
